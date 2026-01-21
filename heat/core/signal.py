@@ -9,6 +9,7 @@ from .types import promote_types, float32, float64
 from .manipulations import pad, flip
 from .factories import array, zeros
 import torch.nn.functional as fc
+from perun import monitor
 
 __all__ = ["convolve", "convolve2d"]
 
