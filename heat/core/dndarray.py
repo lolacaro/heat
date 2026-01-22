@@ -465,6 +465,9 @@ class DNDarray:
             self.__halo_prev = res_prev
             self.__ishalo = True
 
+            # CF
+            self.comm.Barrier()
+
     def __cat_halo(self) -> torch.Tensor:
         """
         Return local array concatenated to halos if they are available.

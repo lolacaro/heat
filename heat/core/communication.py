@@ -1230,34 +1230,8 @@ class MPICommunication(Communication):
             mpi_recvbuf = self.as_buffer(rbuf, recv_counts, recv_displs, rbuf_is_contiguous)
             if recv_counts is None:
                 mpi_recvbuf[1] //= self.size
-        # perform the scatter operation
-        print(
-            self.handle.Get_rank(),
-            "receive _allgather_like before func",
-            recv_counts,
-            recv_displs,
-            recvbuf.shape,
-        )
-        print(
-            self.handle.Get_rank(),
-            "send _allgather_like before func",
-            send_counts,
-            send_displs,
-            sendbuf.shape,
-        )
 
         exit_code = func(mpi_sendbuf, mpi_recvbuf, **kwargs)
-
-        print(
-            self.handle.Get_rank(), "send _allgather_like", send_counts, send_displs, sendbuf.shape
-        )
-        print(
-            self.handle.Get_rank(),
-            "receive _allgather_like",
-            recv_counts,
-            recv_displs,
-            recvbuf.shape,
-        )
 
         return exit_code, sbuf, rbuf, original_recvbuf, recv_axis_permutation
 
