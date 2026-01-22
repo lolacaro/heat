@@ -109,7 +109,7 @@ print("Finished Scale 2d image, convolution fixed")
 print()
 for key in times.keys():
     print(key, np.mean(times[key]), np.std(times[key]))
-with open("Timing_inc-dist-signal_fix-nondist-kernels.csv", "w", newline="") as f:
+with open("Timing_inc-dist-signal_fix-dist-kernels_%s.csv"%device, "w", newline="") as f:
     w = csv.writer(f)
     w.writerow(times.keys())
 
