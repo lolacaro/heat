@@ -21,6 +21,7 @@ for n in range(0,10):
     print("Prepared image", n, current_size)
 
     convolved_image = conv2d_fixed_kernel(image, kernel, mode="full")
+    print("Convolved iamge", n, current_size)
     current_size = int(2*current_size)
 
 print("Finished Scale 2d image, convolution fixed")
