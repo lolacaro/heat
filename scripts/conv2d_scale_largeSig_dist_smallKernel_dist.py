@@ -3,6 +3,7 @@ from perun import monitor
 import os
 from timeit import default_timer as timer
 import csv
+import numpy as np
 
 device = os.getenv("HEAT_DEVICE")
 
@@ -23,8 +24,8 @@ def conv2d_fixed_kernel_5(image, kernel, mode):
     return ht.convolve2d(image, kernel, mode=mode)
 
 # Only image distributed
-kernel = ht.random.rand(9, split=None)
-kernel = ht.reshape(kernel, (3, 3))
+kernel = ht.random.rand(25, split=0)
+kernel = ht.reshape(kernel, (5, 5))
 # Scale 2D image, convolution fixed
 
 current_size = 256
@@ -104,9 +105,10 @@ print("Convolved image", current_size)
 
 
 print("Finished Scale 2d image, convolution fixed")
-print(times.keys())
-for row in zip(*times.values()):
-    print(row)
+
+print()
+for key in times.keys():
+    print(key, np.mean(times[key]), np.std(times[key]))
 with open("Timing_inc-dist-signal_fix-nondist-kernels.csv", "w", newline="") as f:
     w = csv.writer(f)
     w.writerow(times.keys())

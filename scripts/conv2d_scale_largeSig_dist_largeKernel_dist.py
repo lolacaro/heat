@@ -3,6 +3,7 @@ from perun import monitor
 import os
 from timeit import default_timer as timer
 import csv
+import numpy as np
 
 device = os.getenv("HEAT_DEVICE")
 
@@ -23,14 +24,18 @@ def conv2d_fixed_kernel_5(image, kernel, mode):
     return ht.convolve2d(image, kernel, mode=mode)
 
 # Only image distributed
-kernel = ht.random.rand(9, split=None)
-kernel = ht.reshape(kernel, (3, 3))
+
 # Scale 2D image, convolution fixed
 
 current_size = 256
 image = ht.random.rand(current_size**2, split=0, device=device)
 image = ht.reshape(image, (current_size, current_size))
-print("Prepared image", current_size)
+print("Prepared image", current_size, image.is_distributed())
+
+current_kernel_size = 5
+kernel = ht.random.rand(current_kernel_size**2, split=0)
+kernel = ht.reshape(kernel, (current_kernel_size, current_kernel_size))
+print("Prepared kernel", current_kernel_size, kernel.is_distributed())
 
 times={}
 for i in range(50):
@@ -44,9 +49,14 @@ for i in range(50):
 print("Convolved images", current_size)
 
 current_size = 512
-image = ht.random.rand(current_size ** 2, split=0, device=device)
+image = ht.random.rand(current_size**2, split=0, device=device)
 image = ht.reshape(image, (current_size, current_size))
-print("Prepared image", current_size)
+print("Prepared image", current_size, image.is_distributed())
+
+current_kernel_size = 10
+kernel = ht.random.rand(current_kernel_size**2, split=0)
+kernel = ht.reshape(kernel, (current_kernel_size, current_kernel_size))
+print("Prepared kernel", current_kernel_size, kernel.is_distributed())
 
 for i in range(50):
     start = timer()
@@ -60,9 +70,14 @@ print("Convolved image", current_size)
 
 
 current_size = 1024
-image = ht.random.rand(current_size ** 2, split=0, device=device)
+image = ht.random.rand(current_size**2, split=0, device=device)
 image = ht.reshape(image, (current_size, current_size))
-print("Prepared image", current_size)
+print("Prepared image", current_size, image.is_distributed())
+
+current_kernel_size = 20
+kernel = ht.random.rand(current_kernel_size**2, split=0)
+kernel = ht.reshape(kernel, (current_kernel_size, current_kernel_size))
+print("Prepared kernel", current_kernel_size, kernel.is_distributed())
 
 for i in range(50):
     start = timer()
@@ -73,9 +88,14 @@ for i in range(50):
     times[current_size].append(stop - start)
 
 current_size = 2048
-image = ht.random.rand(current_size ** 2, split=0, device=device)
+image = ht.random.rand(current_size**2, split=0, device=device)
 image = ht.reshape(image, (current_size, current_size))
-print("Prepared image", current_size)
+print("Prepared image", current_size, image.is_distributed())
+
+current_kernel_size = 40
+kernel = ht.random.rand(current_kernel_size**2, split=0)
+kernel = ht.reshape(kernel, (current_kernel_size, current_kernel_size))
+print("Prepared kernel", current_kernel_size, kernel.is_distributed())
 
 for i in range(50):
     start = timer()
@@ -88,9 +108,14 @@ for i in range(50):
 print("Convolved image", current_size)
 
 current_size = 4096
-image = ht.random.rand(current_size ** 2, split=0, device=device)
+image = ht.random.rand(current_size**2, split=0, device=device)
 image = ht.reshape(image, (current_size, current_size))
-print("Prepared image", current_size)
+print("Prepared image", current_size, image.is_distributed())
+
+current_kernel_size = 80
+kernel = ht.random.rand(current_kernel_size**2, split=0)
+kernel = ht.reshape(kernel, (current_kernel_size, current_kernel_size))
+print("Prepared kernel", current_kernel_size, kernel.is_distributed())
 
 for i in range(50):
     start = timer()
@@ -104,10 +129,12 @@ print("Convolved image", current_size)
 
 
 print("Finished Scale 2d image, convolution fixed")
-print(times.keys())
-for row in zip(*times.values()):
-    print(row)
-with open("Timing_inc-dist-signal_fix-nondist-kernels.csv", "w", newline="") as f:
+
+print()
+for key in times.keys():
+    print(key, np.mean(times[key]), np.std(times[key]))
+
+with open("Timing_inc-dist-signal_inc-nondist-kernels.csv", "w", newline="") as f:
     w = csv.writer(f)
     w.writerow(times.keys())
 
