@@ -107,8 +107,12 @@ print("Finished Scale 2d image, convolution fixed")
 
 with open("Timing_inc-dist-signal_fix-nondist-kernels.csv", "w", newline="") as f:
     w = csv.DictWriter(f, times.keys())
-    w.writeheader()
-    w.writerow(times)
+    w.writerow(data.keys())
+
+    for row in zip(*data.values()):
+        w.writerow(row)
+
+
 
 # Both distributed
 # Scale 2D image + kernel the same way (keep window the same)
