@@ -3,7 +3,10 @@ import sys
 import os
 from timeit import default_timer as timer
 import csv
-import numpy as np
+from perun import monitor
+
+
+
 
 device = os.getenv("HEAT_DEVICE")
 # define config
@@ -45,39 +48,15 @@ for c, current_size in enumerate(image_sizes):
         c_kernel_size = (c+1)*kernel_size
         kernel = ht.random.rand(c_kernel_size**2, split=split_kernel)
         kernel = ht.reshape(kernel, (c_kernel_size, c_kernel_size))
+    else:
+        c_kernel_size = kernel_size
+
+
+    @monitor(f"convolve2d_image-{current_size}_kernel-{c_kernel_size}")
+    def call_convolution2d(signal, kernel):
+        convolved_image = ht.convolve2d(signal, kernel, mode="full")
 
     for i in range(50):
-        start = timer()
-        convolved_image = ht.convolve2d(image, kernel, mode="full")
-        stop = timer()
-        if i == 0:
-            times[current_size] = []
-        times[current_size].append(stop - start)
+        call_convolution2d(image, kernel)
 
     print(rank, "Convolved images", current_size, c_kernel_size)
-
-if split_image is not None:
-    sig_info = "splitSignal"
-else:
-    sig_info = "Signal"
-
-if split_kernel is not None:
-    kern_info = "splitKernel"
-else:
-    kern_info = "Kernel"
-
-csv_base = f"Timing_conv2d_{device}_{sig_info}{start_image}-{stop_image}"
-if incr_kernel:
-    csv_file_name = f"{csv_base}_{kern_info}{kernel_size}-{c_kernel_size}.csv"
-else:
-    csv_file_name = f"{csv_base}_{kern_info}{kernel_size}.csv"
-
-path = "timing_results"
-if not os.path.exists(path):
-    os.makedirs(path)
-with open(f"{path}/{csv_file_name}", "w", newline="") as f:
-    w = csv.writer(f)
-    w.writerow(times.keys())
-
-    for row in zip(*times.values()):
-        w.writerow(row)
