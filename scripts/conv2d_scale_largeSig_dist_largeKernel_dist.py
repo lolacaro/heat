@@ -33,7 +33,7 @@ image = ht.reshape(image, (current_size, current_size))
 print("Prepared image", current_size, image.is_distributed())
 
 current_kernel_size = 5
-kernel = ht.random.rand(current_kernel_size**2, split=0)
+kernel = ht.random.rand(current_kernel_size**2, split=0, device=device)
 kernel = ht.reshape(kernel, (current_kernel_size, current_kernel_size))
 print("Prepared kernel", current_kernel_size, kernel.is_distributed())
 
@@ -54,7 +54,7 @@ image = ht.reshape(image, (current_size, current_size))
 print("Prepared image", current_size, image.is_distributed())
 
 current_kernel_size = 10
-kernel = ht.random.rand(current_kernel_size**2, split=0)
+kernel = ht.random.rand(current_kernel_size**2, split=0, device=device)
 kernel = ht.reshape(kernel, (current_kernel_size, current_kernel_size))
 print("Prepared kernel", current_kernel_size, kernel.is_distributed())
 
@@ -75,7 +75,7 @@ image = ht.reshape(image, (current_size, current_size))
 print("Prepared image", current_size, image.is_distributed())
 
 current_kernel_size = 20
-kernel = ht.random.rand(current_kernel_size**2, split=0)
+kernel = ht.random.rand(current_kernel_size**2, split=0, device=device)
 kernel = ht.reshape(kernel, (current_kernel_size, current_kernel_size))
 print("Prepared kernel", current_kernel_size, kernel.is_distributed())
 
@@ -93,7 +93,7 @@ image = ht.reshape(image, (current_size, current_size))
 print("Prepared image", current_size, image.is_distributed())
 
 current_kernel_size = 40
-kernel = ht.random.rand(current_kernel_size**2, split=0)
+kernel = ht.random.rand(current_kernel_size**2, split=0, device=device)
 kernel = ht.reshape(kernel, (current_kernel_size, current_kernel_size))
 print("Prepared kernel", current_kernel_size, kernel.is_distributed())
 
@@ -113,7 +113,7 @@ image = ht.reshape(image, (current_size, current_size))
 print("Prepared image", current_size, image.is_distributed())
 
 current_kernel_size = 80
-kernel = ht.random.rand(current_kernel_size**2, split=0)
+kernel = ht.random.rand(current_kernel_size**2, split=0, device=device)
 kernel = ht.reshape(kernel, (current_kernel_size, current_kernel_size))
 print("Prepared kernel", current_kernel_size, kernel.is_distributed())
 

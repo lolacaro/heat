@@ -24,7 +24,7 @@ def conv2d_fixed_kernel_5(image, kernel, mode):
     return ht.convolve2d(image, kernel, mode=mode)
 
 # Only image distributed
-kernel = ht.random.rand(25, split=0)
+kernel = ht.random.rand(25, split=0, device=device)
 kernel = ht.reshape(kernel, (5, 5))
 # Scale 2D image, convolution fixed
 
