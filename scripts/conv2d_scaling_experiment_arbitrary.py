@@ -5,8 +5,15 @@ from perun import monitor
 
 
 
+if os.environ["HEAT_DEVICE"]:
+    device = os.environ["HEAT_DEVICE"]
+else:
+    device = "cpu"
 
-device = os.getenv("HEAT_DEVICE")
+print(device)
+ht.use_device(device)
+ht.random.seed(732034)
+
 # define config
 if len(sys.argv) > 1:
     split_image = int(sys.argv[1])
@@ -36,7 +43,6 @@ else:
 world_size = ht.MPI_WORLD.size
 rank = ht.MPI_WORLD.rank
 
-
 # Only image distributed
 kernel = ht.random.rand(kernel_size**2, split=split_kernel)
 kernel = ht.reshape(kernel, (kernel_size, kernel_size))
@@ -45,7 +51,7 @@ kernel = ht.reshape(kernel, (kernel_size, kernel_size))
 image_sizes = range(start_image,stop_image+1,start_image)
 times = {}
 for c, current_size in enumerate(image_sizes):
-    image = ht.random.rand(current_size**2, split=split_image, device=device)
+    image = ht.random.rand(current_size**2, split=split_image)
     image = ht.reshape(image, (current_size, current_size))
 
     if incr_kernel:
