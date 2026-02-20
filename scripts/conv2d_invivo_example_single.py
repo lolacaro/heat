@@ -2,7 +2,9 @@ import heat as ht
 from perun import monitor
 import sys
 import numpy as np
-ht.use_device("cpu")
+
+device="cpu"
+ht.use_device(device)
 
 #monitored functions
 @monitor()
